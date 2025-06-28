@@ -1,0 +1,22 @@
+defauls:
+  - data: cataract
+  - training: default
+
+
+project_name: "Custom_YOLOv8_Cataract"
+experiment_name: "experiment_1"
+device: "cuda"
+seed: 42
+save_dir: "runs/"
+
+
+model:
+  name: "CustomYOLOv8"
+  num_classes: 2
+  input_size: 640
+  confidence_threshold: 0.25
+  iou_threshold: 0.45
+
+mlflow:
+  tracking_uri: "mlruns"
+  experiment_name: "${project_name}"

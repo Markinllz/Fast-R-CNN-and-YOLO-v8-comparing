@@ -1,0 +1,17 @@
+name: "cataract_dataset"
+num_classes: 2
+class_names: ["normal", "cataract"]
+
+train_path: "Dataset/train"
+val_path: "Dataset/val" 
+test_path: "Dataset/test"
+
+batch_size: 16
+num_workers: 4
+shuffle: true
+pin_memory: true
+drop_last: false
+
+img_size: 640
+model_type: "yolo"
+
