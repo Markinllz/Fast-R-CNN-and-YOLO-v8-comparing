@@ -1,6 +1,7 @@
 epochs: 100
 learning_rate: 0.001
 batch_size: 16
+pretrained: False
 
 optimizer:
   type: "Adam"
