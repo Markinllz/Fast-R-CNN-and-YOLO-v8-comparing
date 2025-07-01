@@ -19,4 +19,4 @@ MLflow integration for experiment tracking
 This project can be easily adapted for custom eye detection tasks or similar medical computer vision applications.
 
 
-![Pred examples](./i_1217_jpg.rf.eac9a83f0c1f881935b837ab2946a80a.jpg)
+![Pred examples](./image_181_png.rf.fd2c69e43c535920b4992b5722f28e46.jpg)
