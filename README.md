@@ -19,5 +19,5 @@ MLflow integration for experiment tracking
 This project can be easily adapted for custom eye detection tasks or similar medical computer vision applications.
 
 
-![Pred examples](.https://github.com/Markinllz/Fast-R-CNN-and-YOLO-v8-comparing/blob/6474635dc9b1772a1e65fd3df0023fdf617f7500/image_214_png.rf.6e4a526b47c985490a3359d210db6737.jpg)
-![Pred example](https://github.com/Markinllz/Fast-R-CNN-and-YOLO-v8-comparing/blob/82f485949f06c0d9c035cd43d5c0c5a13b7015f8/image_241_png.rf.392ba6d7e8360065f420f145c3acf913.jpg)
+![Pred examples](https://github.com/Markinllz/Fast-R-CNN-and-YOLO-v8-comparing/blob/fc5b86e66cc5034aa5c567a3e5760aebc8e08037/image_214_png.rf.6e4a526b47c985490a3359d210db6737.jpg)
+![Pred example]()
