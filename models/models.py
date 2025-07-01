@@ -96,7 +96,7 @@ class Detect(nn.Module):
         self.reg_max = reg_max
         self.strides = [8, 16 , 32]
 
-        self.cv2 = [(Conv(p, 1 + self.num_classes + 4*self.reg_max, 1)) for p in ch]
+        self.cv2 = [(Conv(p, self.num_classes + 4*self.reg_max, 1)) for p in ch]
 
 
 
@@ -176,5 +176,5 @@ class YOLOv8(nn.Module):
         n4 = self.cv21(c4)
 
         # Head
-        outputs = self.detect([n2, n3, n4])
+        outputs = self.cv22([n2, n3, n4])
         return outputs

@@ -9,9 +9,9 @@ from utils.logger import logger
 from models.models import YOLOv8
 import torch
 import torch.nn.functional as F
-import tqdm
+from tqdm import tqdm
 from utils.losses import YoloLoss
-from.utils.losses import generate_anchors, prepare_targets, process_outputs, assign_predictions_to_targets
+from utils.losses import generate_anchors, prepare_targets, process_outputs, assign_predictions_to_targets
 from utils.losses import convert_to_preds, convert_targets_for_map, compute_map
 from torchmetrics.detection.mean_ap import MeanAveragePrecision
 from dataloader.dataloader import create_loaders
@@ -45,13 +45,8 @@ class YOLOv8Trainer:
 
 
     def _setup_device(self):
-        if self.cfg.device == "auto":
-            device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        elif self.cfg.device == "cuda" or self.cfg.device == "cpu":
-            device = torch.device(self.cfg.device)
-        else:
-            raise ValueError(f"Unsupported device: {self.cfg.device}")
-        logger.info(f"Device is {self.cfg.device}")
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        logger.info(f"Device is {device}")
 
         return device
 
@@ -65,9 +60,9 @@ class YOLOv8Trainer:
         mlflow.start_run()
 
         mlflow.log_params({
-            "epochs": self.cfg.training.epochs,
-            "lr": self.cfg.training.learning_rate,
-            "batch_size": self.cfg.training.batch_size
+            "epochs": self.cfg.epochs,
+            "lr": self.cfg.learning_rate,
+            "batch_size": self.cfg.batch_size
         })
 
 
@@ -76,7 +71,7 @@ class YOLOv8Trainer:
             if (self.cfg.pretrained == True):
                 pass
             else:
-                self.model = YOLOv8(self.cfg.input_size, self.cfg.confidence_threshold, self.cfg.iou_threshold, self.cfg.num_classes)
+                self.model = YOLOv8(self.cfg.confidence_threshold, self.cfg.iou_threshold, self.cfg.num_classes, self.cfg.reg_max)
                 self.model = self.model.to(self.device)
 
 
@@ -108,9 +103,9 @@ class YOLOv8Trainer:
         mAP_metric = MeanAveragePrecision()
 
 
-        for part , (images, targets) in enumerate(tqdm(val_loader, desc = f"Train_epoch {epoch+1}")):
-
-            images = images.to(self.device)
+        for part, batch in enumerate(tqdm(val_loader, desc = f"Val Epoch {epoch+1}")):
+            images = batch['images'].to(self.device)
+            targets = batch['targets']
 
             preds = self.model(images)
 
@@ -145,8 +140,9 @@ class YOLOv8Trainer:
     def _train_epoch(self, train_loader, epoch):
         running_loss = 0
         self.model.train()
-        for part, (images, targets) in enumerate(tqdm(train_loader, desc =f"Val Epoch {epoch+1}")):
-            images = images.to(self.device)
+        for part, batch in enumerate(tqdm(train_loader, desc =f"Train Epoch {epoch+1}")):
+            images = batch['images'].to(self.device)
+            targets = batch['targets']
 
             self.optimizer.zero_grad()
 
@@ -189,7 +185,7 @@ class YOLOv8Trainer:
 
         #Preprocessing targets
 
-        gt_labels, gt_bboxes, mask_gt = prepare_targets(target,self.cfg.training.batch_size, self.device)
+        gt_labels, gt_bboxes, mask_gt = prepare_targets(target,self.cfg.batch_size, self.device)
 
         #Task Aligned Assigner
 
@@ -242,7 +238,7 @@ class YOLOv8Trainer:
     def train(self):
         self._setup_train()
         train_loader, val_loader = create_loaders(self.cfg)
-        num_epochs = self.cfg.training.epochs
+        num_epochs = self.cfg.epochs
 
         for epoch in range(num_epochs):
             
@@ -271,9 +267,13 @@ class YOLOv8Trainer:
 
 
 
-@hydra.main(config_path='configs', config_name = 'training/default', version_base="1.1")
+@hydra.main(config_path='configs', config_name = 'config', version_base="1.1")
 def main (cfg : DictConfig):
     trainer = YOLOv8Trainer(cfg, logger)
     trainer.train()
     mlflow.end_run()
+
+
+if __name__ == "__main__":
+    main()
     

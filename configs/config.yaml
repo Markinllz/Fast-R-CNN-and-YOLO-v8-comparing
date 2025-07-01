@@ -1,22 +1,42 @@
-defauls:
-  - data: cataract
-  - training: default
+
+device: "auto" 
+input_size: 640
+confidence_threshold: 0.25
+iou_threshold: 0.5
+num_classes: 2
+model_type: "detection"  
 
 
-project_name: "Custom_YOLOv8_Cataract"
-experiment_name: "experiment_1"
-device: "cuda"
-seed: 42
-save_dir: "runs/"
+epochs: 100
+learning_rate: 0.01 
+batch_size: 16
+pretrained: true
+
+name: "eye_detection_dataset"
+class_names: ["normal_eye", "cataract_eye"]
+train_path: "/Users/bagdasaryanproduction/Eye Segmentation/Dataset/train/images"
+val_path: "/Users/bagdasaryanproduction/Eye Segmentation/Dataset/val/images"
+test_path: "/Users/bagdasaryanproduction/Eye Segmentation/Dataset/test/images"
+img_path: Dataset/test/images/i_6_jpg.rf.656e7db6074c5e9a96d62604fdc7e0cf.jpg
+num_workers: 4
+shuffle: true
+pin_memory: false  
+
+drop_last: false
 
 
-model:
-  name: "CustomYOLOv8"
-  num_classes: 2
-  input_size: 640
-  confidence_threshold: 0.25
-  iou_threshold: 0.45
+early_stopping:
+  enabled: true
+  patience: 20 
+  min_delta: 0.001
 
-mlflow:
-  tracking_uri: "mlruns"
-  experiment_name: "${project_name}"
+
+checkpoint:
+  save_best: true
+  save_last: true
+  save_every: 10
+
+
+validation:
+  interval: 1
+  save_predictions: true
