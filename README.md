@@ -20,3 +20,4 @@ This project can be easily adapted for custom eye detection tasks or similar med
 
 
 ![Pred examples](./image_181_png.rf.fd2c69e43c535920b4992b5722f28e46.jpg)
+![Pred example](https://github.com/Markinllz/Fast-R-CNN-and-YOLO-v8-comparing/blob/82f485949f06c0d9c035cd43d5c0c5a13b7015f8/image_241_png.rf.392ba6d7e8360065f420f145c3acf913.jpg)
